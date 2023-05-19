@@ -20,8 +20,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const AppState(
-      selectedPlan: null,
-      shouldShowPaymentButton: true,
       child: MaterialApp(
         title: 'SkyNet',
         home: AnnotatedRegion<SystemUiOverlayStyle>(
@@ -51,8 +49,8 @@ class _BottomTabState extends State<BottomTab> {
 
   @override
   Widget build(BuildContext context) {
-    bool showPayButtonValue = AppState.shouldShowPaymentButtonOf(context)!;
-    Plan? selectedPlanValue = AppState.selectedPlanOf(context);
+    bool showPayButtonValue = AppState.of(context).shouldShowPayButton;
+    Plan? selectedPlanValue = AppState.of(context).selectedPlan;
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(

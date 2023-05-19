@@ -20,8 +20,8 @@ class RechargePage extends StatefulWidget {
 class _RechargePageState extends State<RechargePage> {
   @override
   Widget build(BuildContext context) {
-    bool showPayButtonValue = AppState.shouldShowPaymentButtonOf(context)!;
-    Plan? selectedPlanValue = AppState.selectedPlanOf(context);
+    bool showPayButtonValue = AppState.of(context).shouldShowPayButton;
+    Plan? selectedPlanValue = AppState.of(context).selectedPlan;
 
     return Column(
       children: [
@@ -30,11 +30,11 @@ class _RechargePageState extends State<RechargePage> {
             onTap: () {
               setState(() {
                 if (selectedPlanValue == plan) {
-                  showPayButtonValue = false;
-                  selectedPlanValue = null;
+                  AppState.of(context).updateShouldShowPayButton(false);
+                  AppState.of(context).updateSelectedPlan(null);
                 } else {
-                  showPayButtonValue = true;
-                  selectedPlanValue = plan;
+                  AppState.of(context).updateShouldShowPayButton(true);
+                  AppState.of(context).updateSelectedPlan(plan);
                 }
               });
             },

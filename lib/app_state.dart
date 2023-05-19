@@ -1,49 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:skynet/recharge/recharge_page.dart';
 
-enum AppStateAspect {
-  shouldShowPaymentButton,
-  selectedPlan,
+class _InheritedAppState extends InheritedWidget {
+  final AppStateState data;
+  const _InheritedAppState({
+    required this.data,
+    required Widget child,
+  }) : super(child: child);
+  @override
+  bool updateShouldNotify(_InheritedAppState oldWidget) {
+    return true;
+  }
 }
 
-class AppState extends InheritedModel<AppStateAspect> {
-  final bool shouldShowPaymentButton;
-  final Plan? selectedPlan;
-  const AppState(
-      {super.key,
-      required super.child,
-      required this.shouldShowPaymentButton,
-      required this.selectedPlan});
-
-  static bool? shouldShowPaymentButtonOf(BuildContext context) {
-    return InheritedModel.inheritFrom<AppState>(context,
-            aspect: AppStateAspect.shouldShowPaymentButton)
-        ?.shouldShowPaymentButton;
-  }
-
-  static Plan? selectedPlanOf(BuildContext context) {
-    return InheritedModel.inheritFrom<AppState>(context,
-            aspect: AppStateAspect.selectedPlan)
-        ?.selectedPlan;
+class AppState extends StatefulWidget {
+  final Widget child;
+  const AppState({super.key, required this.child});
+  static AppStateState of(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<_InheritedAppState>()
+            as _InheritedAppState)
+        .data;
   }
 
   @override
-  bool updateShouldNotify(AppState oldWidget) {
-    return shouldShowPaymentButton != oldWidget.shouldShowPaymentButton ||
-        selectedPlan != oldWidget.selectedPlan;
+  State<AppState> createState() => AppStateState();
+}
+
+class AppStateState extends State<AppState> {
+  bool shouldShowPayButton = false;
+  Plan? selectedPlan;
+  void updateShouldShowPayButton(bool value) {
+    setState(() {
+      shouldShowPayButton = value;
+    });
+  }
+
+  void updateSelectedPlan(Plan? value) {
+    setState(() {
+      selectedPlan = value;
+    });
   }
 
   @override
-  bool updateShouldNotifyDependent(
-      AppState oldWidget, Set<AppStateAspect> dependencies) {
-    if (shouldShowPaymentButton != oldWidget.shouldShowPaymentButton &&
-        dependencies.contains(AppStateAspect.shouldShowPaymentButton)) {
-      return true;
-    }
-    if (selectedPlan != oldWidget.selectedPlan &&
-        dependencies.contains(AppStateAspect.selectedPlan)) {
-      return true;
-    }
-    return false;
+  Widget build(BuildContext context) {
+    return _InheritedAppState(data: this, child: widget.child);
   }
 }
