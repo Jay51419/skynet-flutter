@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:skynet/theme.dart';
 
 import '../components/detail_tab.dart';
+import '../components/loader.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -43,15 +44,11 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           const SizedBox(
-            height: 40,
+            height: 60,
           ),
-          Container(
-            height: 84 + 16 * 2,
+          SizedBox(
+            height: 84,
             width: double.infinity,
-            padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.black12, width: 0.5)),
             child: Stack(
               clipBehavior: Clip.none,
               children: [
@@ -59,58 +56,79 @@ class _HomePageState extends State<HomePage> {
                   "This month's total",
                   style: GoogleFonts.poppins(),
                 ),
-                Positioned(
-                  top: 4,
-                  child: Text(
-                    '39.87',
-                    style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 60,
-                    ),
-                  ),
+                FutureBuilder(
+                  future:
+                      Future.delayed(const Duration(seconds: 3), () => "39.87"),
+                  builder: (context, snapshot) {
+                    Size size = MediaQuery.of(context).size;
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Positioned(
+                        top: 24,
+                        child: Loader(
+                          height: 62,
+                          width: size.width / 2,
+                        ),
+                      );
+                    }
+                    if (snapshot.hasError) {
+                      return const Text("Error occured");
+                    }
+                    return Positioned(
+                      top: 4,
+                      child: RichText(
+                        text: TextSpan(
+                          text: snapshot.data,
+                          style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 60,
+                              color: Colors.black),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: 'GB',
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
           ),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.black12, width: 0.5)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Plan details",
-                  style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-                ),
-                const DetailTab(name: "Speed", data: "50 Mbps"),
-                const DetailTab(name: "Data", data: "Unlimited"),
-                const DetailTab(name: "Validity", data: "30 Days"),
-              ],
-            ),
+          const Divider(
+            height: 40,
           ),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.black12, width: 0.5)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "Next Recharge",
-                  style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  "03-Jan,23",
-                  style: GoogleFonts.poppins(color: Colors.black38),
-                ),
-              ],
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Plan details",
+                style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+              ),
+              const DetailTab(name: "Speed", data: "50 Mbps"),
+              const DetailTab(name: "Data", data: "Unlimited"),
+              const DetailTab(name: "Validity", data: "30 Days"),
+            ],
+          ),
+          const Divider(
+            height: 40,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "Next Recharge",
+                style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+              ),
+              Text(
+                "03-Jan,23",
+                style: GoogleFonts.poppins(color: Colors.black38),
+              ),
+            ],
           )
         ],
       ),

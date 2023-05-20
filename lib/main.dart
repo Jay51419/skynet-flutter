@@ -54,6 +54,7 @@ class _BottomTabState extends State<BottomTab> {
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
           top: true,
           child: SizedBox(
