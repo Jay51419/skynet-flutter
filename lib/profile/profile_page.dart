@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:skynet/change_wifi_password/change_wifi_password_page.dart';
-import 'package:skynet/login/login_page.dart';
 import 'package:skynet/components/button_detail_tab.dart';
 import 'package:skynet/components/detail_tab.dart';
 
+import '../authentication/authentication_controller.dart';
 import '../components/dropdown_detail_tab.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -12,6 +13,8 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authController =
+        Provider.of<AuthenticationController>(context, listen: false);
     return DecoratedBox(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -84,10 +87,7 @@ class ProfilePage extends StatelessWidget {
                       (states) => Colors.black12),
                 ),
                 onPressed: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) {
-                    return const LoginPage();
-                  }));
+                  authController.logout();
                 },
                 child: const Row(
                   children: [Icon(Icons.logout), Text("Logout")],

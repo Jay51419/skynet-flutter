@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 
-import '../components/bottom_tab.dart';
+import '../authentication/authentication_controller.dart';
 import '../theme.dart';
 
 class LoginPage extends StatelessWidget {
@@ -11,20 +12,20 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final authController =
+        Provider.of<AuthenticationController>(context, listen: false);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
           child: SizedBox(
         height: size.height,
-        width: size.height,
+        width: size.width,
         child: SingleChildScrollView(
           child: Container(
             height: size.height,
             padding: const EdgeInsets.all(8.0),
-            child: Column(children: [
-              const SizedBox(
-                height: 60,
-              ),
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Image.asset(
                 "assets/logo.png",
                 height: 170,
@@ -77,10 +78,11 @@ class LoginPage extends StatelessWidget {
                       return primaryColor;
                     })),
                 onPressed: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) {
-                    return const BottomTab();
-                  }));
+                  authController.login("admin", "admin");
+                  // Navigator.pushReplacement(context,
+                  //     MaterialPageRoute(builder: (context) {
+                  //   return const BottomTab();
+                  // }));
                 },
                 child: Text(
                   "Login",
