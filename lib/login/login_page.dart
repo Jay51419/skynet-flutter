@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 
-import '../app_state.dart';
+import '../components/bottom_tab.dart';
 import '../theme.dart';
 
 class LoginPage extends StatelessWidget {
@@ -78,7 +77,10 @@ class LoginPage extends StatelessWidget {
                       return primaryColor;
                     })),
                 onPressed: () {
-                  AppState.of(context).updateHasAuthenticated(true);
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) {
+                    return const BottomTab();
+                  }));
                 },
                 child: Text(
                   "Login",

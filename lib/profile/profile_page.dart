@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:skynet/app_state.dart';
 import 'package:skynet/change_wifi_password/change_wifi_password_page.dart';
+import 'package:skynet/login/login_page.dart';
 import 'package:skynet/components/button_detail_tab.dart';
 import 'package:skynet/components/detail_tab.dart';
 
@@ -85,7 +85,10 @@ class ProfilePage extends StatelessWidget {
                         (states) => Colors.black12),
                   ),
                   onPressed: () {
-                    AppState.of(context).updateHasAuthenticated(false);
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) {
+                      return const LoginPage();
+                    }));
                   },
                   child: const Row(
                     children: [Icon(Icons.logout), Text("Logout")],
