@@ -29,9 +29,16 @@ class AppState extends StatefulWidget {
 class AppStateState extends State<AppState> {
   bool shouldShowPayButton = false;
   Plan? selectedPlan;
+  bool hasAuthenticated = false;
   void updateShouldShowPayButton(bool value) {
     setState(() {
       shouldShowPayButton = value;
+    });
+  }
+
+  void updateHasAuthenticated(bool value) {
+    setState(() {
+      hasAuthenticated = value;
     });
   }
 

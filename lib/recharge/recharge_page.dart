@@ -25,52 +25,63 @@ class _RechargePageState extends State<RechargePage> {
 
     return Column(
       children: [
+        const SizedBox(
+          height: 20,
+        ),
         for (var plan in plans)
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                if (selectedPlanValue == plan) {
-                  AppState.of(context).updateShouldShowPayButton(false);
-                  AppState.of(context).updateSelectedPlan(null);
-                } else {
-                  AppState.of(context).updateShouldShowPayButton(true);
-                  AppState.of(context).updateSelectedPlan(plan);
-                }
-              });
-            },
-            child: AnimatedContainer(
-              padding: const EdgeInsets.all(8),
-              margin: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                  color: selectedPlanValue == plan
-                      ? Colors.blue.shade50
-                      : Colors.white,
-                  border: Border.all(color: Colors.black12, width: 0.5)),
-              duration: const Duration(milliseconds: 200),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "₹ ${plan.rate}",
-                    style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold, fontSize: 24),
+          Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    if (selectedPlanValue == plan) {
+                      AppState.of(context).updateShouldShowPayButton(false);
+                      AppState.of(context).updateSelectedPlan(null);
+                    } else {
+                      AppState.of(context).updateShouldShowPayButton(true);
+                      AppState.of(context).updateSelectedPlan(plan);
+                    }
+                  });
+                },
+                child: AnimatedContainer(
+                  padding: const EdgeInsets.all(16),
+                  margin: const EdgeInsets.symmetric(vertical: 4),
+                  decoration: BoxDecoration(
+                      color: selectedPlanValue == plan
+                          ? Colors.blue.shade50
+                          : Colors.white,
+                      border: Border.all(color: Colors.black12, width: 0.5)),
+                  duration: const Duration(milliseconds: 200),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "₹ ${plan.rate}",
+                        style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.bold, fontSize: 24),
+                      ),
+                      Text(
+                        plan.desc,
+                        style: GoogleFonts.poppins(color: Colors.black38),
+                      ),
+                    ],
                   ),
-                  Text(
-                    plan.desc,
-                    style: GoogleFonts.poppins(color: Colors.black38),
-                  ),
-                ],
+                ),
               ),
-            ),
+              AnimatedOpacity(
+                duration: const Duration(milliseconds: 300),
+                opacity:
+                    showPayButtonValue && selectedPlanValue == plan ? 1 : 0,
+                child: Padding(
+                  padding: const EdgeInsets.only(),
+                  child: Text(
+                    "Click selection to go back.",
+                    style: GoogleFonts.poppins(color: Colors.black26),
+                  ),
+                ),
+              ),
+            ],
           ),
-        AnimatedOpacity(
-          duration: const Duration(milliseconds: 300),
-          opacity: showPayButtonValue ? 1 : 0,
-          child: Text(
-            "Click selection to go back.",
-            style: GoogleFonts.poppins(color: Colors.black26),
-          ),
-        )
       ],
     );
   }

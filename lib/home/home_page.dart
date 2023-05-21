@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:skynet/theme.dart';
 
 import '../components/detail_tab.dart';
-import '../components/loader.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -56,44 +55,21 @@ class _HomePageState extends State<HomePage> {
                   "This month's total",
                   style: GoogleFonts.poppins(),
                 ),
-                FutureBuilder(
-                  future:
-                      Future.delayed(const Duration(seconds: 3), () => "39.87"),
-                  builder: (context, snapshot) {
-                    Size size = MediaQuery.of(context).size;
-
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Positioned(
-                        top: 24,
-                        child: Loader(
-                          height: 62,
-                          width: size.width / 2,
-                        ),
-                      );
-                    }
-                    if (snapshot.hasError) {
-                      return const Text("Error occured");
-                    }
-                    return Positioned(
-                      top: 4,
-                      child: RichText(
-                        text: TextSpan(
-                          text: snapshot.data,
-                          style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 60,
-                              color: Colors.black),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: 'GB',
-                              style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
-                            ),
-                          ],
-                        ),
+                RichText(
+                  text: TextSpan(
+                    text: "37.98",
+                    style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 60,
+                        color: Colors.black),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: 'GB',
+                        style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.bold, fontSize: 16),
                       ),
-                    );
-                  },
+                    ],
+                  ),
                 ),
               ],
             ),

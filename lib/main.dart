@@ -2,6 +2,7 @@ import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:skynet/login/login_page.dart';
 import 'package:skynet/profile/profile_page.dart';
 import 'package:skynet/support/support_page.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -11,7 +12,7 @@ import 'package:skynet/theme.dart';
 import 'home/home_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const AppState(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -19,13 +20,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AppState(
-      child: MaterialApp(
-        title: 'SkyNet',
-        home: AnnotatedRegion<SystemUiOverlayStyle>(
-          value: SystemUiOverlayStyle.dark,
-          child: BottomTab(),
-        ),
+    bool hasAuthenticated = AppState.of(context).hasAuthenticated;
+    return MaterialApp(
+      title: 'SkyNet',
+      home: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.dark,
+        child: AnimatedCrossFade(
+            firstChild: const LoginPage(),
+            secondChild: const BottomTab(),
+            crossFadeState: hasAuthenticated
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
+            duration: const Duration(milliseconds: 300)),
       ),
     );
   }
@@ -65,24 +71,24 @@ class _BottomTabState extends State<BottomTab> {
             ),
           )),
       bottomNavigationBar: AnimatedCrossFade(
-        firstChild: InkWell(
-          onTap: () async {
+        firstChild: TextButton(
+          onPressed: () async {
             final Uri url = Uri.parse(
                 'upi://pay?pa=jaygandhi51419@okhdfcbank&pn=SkyNet&am=${selectedPlanValue?.rate}&cu=INR');
             if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
               throw Exception('Could not launch $url');
             }
           },
-          child: Container(
-            height: 70,
-            width: double.infinity,
-            alignment: Alignment.center,
-            color: primaryColor,
-            child: Text(
-              "Pay with UPI",
-              style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.bold, color: Colors.white),
-            ),
+          style: ButtonStyle(
+              fixedSize: MaterialStateProperty.resolveWith(
+                  (states) => Size(size.width, 60)),
+              backgroundColor: MaterialStateColor.resolveWith((states) {
+                return primaryColor;
+              })),
+          child: Text(
+            "Pay with UPI",
+            style: GoogleFonts.poppins(
+                fontWeight: FontWeight.bold, color: Colors.white),
           ),
         ),
         secondChild: FlashyTabBar(

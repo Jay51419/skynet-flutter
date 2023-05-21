@@ -56,18 +56,19 @@ class ChangeWifiPasswordPage extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  InkWell(
-                    onTap: () async {},
-                    child: Container(
-                      height: 70,
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                      color: primaryColor,
-                      child: Text(
-                        "Apply for changes",
-                        style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.bold, color: Colors.white),
-                      ),
+                  TextButton(
+                    style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.resolveWith(
+                            (states) => Size(size.width, 60)),
+                        backgroundColor:
+                            MaterialStateColor.resolveWith((states) {
+                          return primaryColor;
+                        })),
+                    onPressed: () {},
+                    child: Text(
+                      "Apply for changes",
+                      style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.bold, color: Colors.white),
                     ),
                   ),
                 ],
