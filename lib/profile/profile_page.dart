@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:skynet/app_state.dart';
 import 'package:skynet/change_wifi_password/change_wifi_password_page.dart';
 import 'package:skynet/components/button_detail_tab.dart';
 import 'package:skynet/components/detail_tab.dart';
@@ -67,6 +68,27 @@ class ProfilePage extends StatelessWidget {
                         style: GoogleFonts.poppins(color: Colors.black38),
                       ),
                     ],
+                  ),
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                alignment: Alignment.center,
+                child: TextButton(
+                  style: ButtonStyle(
+                    alignment: Alignment.center,
+                    fixedSize: MaterialStateProperty.resolveWith(
+                        (states) => const Size(84, 40)),
+                    foregroundColor: MaterialStateColor.resolveWith(
+                        (states) => Colors.red.shade200),
+                    overlayColor: MaterialStateColor.resolveWith(
+                        (states) => Colors.black12),
+                  ),
+                  onPressed: () {
+                    AppState.of(context).updateHasAuthenticated(false);
+                  },
+                  child: const Row(
+                    children: [Icon(Icons.logout), Text("Logout")],
                   ),
                 ),
               ),

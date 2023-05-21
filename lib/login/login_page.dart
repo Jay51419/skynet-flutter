@@ -61,8 +61,14 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
               ),
+              Container(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                    onPressed: () {},
+                    child: const Text("Forgot your password?")),
+              ),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
               TextButton(
                 style: ButtonStyle(
