@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-// import 'package:flutter_svg/flutter_svg.dart';
 
 import '../authentication/authentication_controller.dart';
 import '../theme.dart';
@@ -21,6 +20,9 @@ class _LoginPageState extends State<LoginPage> {
     text: "",
   );
   bool loading = false;
+  String error = "";
+  String? emailError;
+  String? passwordError;
 
   @override
   Widget build(BuildContext context) {
@@ -44,17 +46,28 @@ class _LoginPageState extends State<LoginPage> {
                 height: 170,
               ),
               const SizedBox(
-                height: 60,
+                height: 30,
               ),
-              TextField(
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  error,
+                  style: GoogleFonts.poppins(color: Colors.red),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: "Email",
-                  border: OutlineInputBorder(
+                  errorText: emailError,
+                  border: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black12, width: 1),
                   ),
-                  focusedBorder: OutlineInputBorder(
+                  focusedBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: primaryColor, width: 1),
                   ),
                 ),
@@ -66,12 +79,13 @@ class _LoginPageState extends State<LoginPage> {
                 controller: passwordController,
                 keyboardType: TextInputType.visiblePassword,
                 obscureText: true,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: "Password",
-                  border: OutlineInputBorder(
+                  errorText: passwordError,
+                  border: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black12, width: 1),
                   ),
-                  focusedBorder: OutlineInputBorder(
+                  focusedBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: primaryColor, width: 1),
                   ),
                 ),
@@ -96,18 +110,47 @@ class _LoginPageState extends State<LoginPage> {
                         return primaryColor;
                       })),
                   onPressed: () async {
+                    final emailRegex = RegExp(
+                        r"^(?!\s*$)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$");
+                    final passwordRegex = RegExp(r"^.+$");
                     setState(() {
-                      loading = true;
+                      error = "";
                     });
-
-                    await authController
-                        .login(emailController.text, passwordController.text)
-                        .whenComplete(() {
+                    if (emailRegex.hasMatch(emailController.text)) {
                       setState(() {
+                        emailError = null;
+                      });
+                      if (passwordRegex.hasMatch(passwordController.text)) {
+                        setState(() {
+                          passwordError = null;
+                          loading = true;
+                        });
+                        await authController
+                            .login(
+                                emailController.text, passwordController.text)
+                            .whenComplete(() {
+                          setState(() {
+                            loading = false;
+                          });
+                        }).catchError(
+                          (err, stackTrace) {
+                            setState(() {
+                              error = err.toString();
+                            });
+                          },
+                        );
+                      } else {
+                        setState(() {
+                          passwordError = "Enter password";
+                          loading = false;
+                        });
+                      }
+                    } else {
+                      setState(() {
+                        emailError = "Enter a valid email";
                         loading = false;
                       });
-                    }).catchError(
-                            (error, stackTrace) => print(error.toString()));
+                    }
                   },
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
