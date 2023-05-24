@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
               transitionBuilder: (child, animation) {
                 return ScaleTransition(
                     scale:
-                        Tween<double>(begin: 0.90, end: 1).animate(animation),
+                        Tween<double>(begin: 0.95, end: 1).animate(animation),
                     child: child);
               },
               child: authController.loggedIn

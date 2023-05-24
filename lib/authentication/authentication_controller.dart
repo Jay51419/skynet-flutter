@@ -12,9 +12,13 @@ class AuthenticationController extends ChangeNotifier {
   AuthenticationController(this._authenticationService);
 
   Future<void> login(String email, String password) async {
-    final loginSuccess = await _authenticationService.login(email, password);
-    _loggedIn = loginSuccess;
-    notifyListeners();
+    try {
+      final loginSuccess = await _authenticationService.login(email, password);
+      _loggedIn = loginSuccess;
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> logout() async {

@@ -6,14 +6,27 @@ import 'package:provider/provider.dart';
 import '../authentication/authentication_controller.dart';
 import '../theme.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  TextEditingController emailController = TextEditingController(
+    text: "",
+  );
+  TextEditingController passwordController = TextEditingController(
+    text: "",
+  );
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final authController =
-        Provider.of<AuthenticationController>(context, listen: false);
+        Provider.of<AuthenticationController>(context, listen: true);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -33,9 +46,10 @@ class LoginPage extends StatelessWidget {
               const SizedBox(
                 height: 60,
               ),
-              const TextField(
+              TextField(
+                controller: emailController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: "Email",
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black12, width: 1),
@@ -48,10 +62,11 @@ class LoginPage extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              const TextField(
+              TextField(
+                controller: passwordController,
                 keyboardType: TextInputType.visiblePassword,
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: "Password",
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black12, width: 1),
@@ -71,25 +86,48 @@ class LoginPage extends StatelessWidget {
                 height: 10,
               ),
               TextButton(
-                style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.resolveWith(
-                        (states) => Size(size.width, 60)),
-                    backgroundColor: MaterialStateColor.resolveWith((states) {
-                      return primaryColor;
-                    })),
-                onPressed: () {
-                  authController.login("admin", "admin");
-                  // Navigator.pushReplacement(context,
-                  //     MaterialPageRoute(builder: (context) {
-                  //   return const BottomTab();
-                  // }));
-                },
-                child: Text(
-                  "Login",
-                  style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-              ),
+                  style: ButtonStyle(
+                      fixedSize: MaterialStateProperty.resolveWith(
+                          (states) => Size(size.width, 60)),
+                      backgroundColor: MaterialStateColor.resolveWith((states) {
+                        if (loading) {
+                          return Colors.black12;
+                        }
+                        return primaryColor;
+                      })),
+                  onPressed: () async {
+                    setState(() {
+                      loading = true;
+                    });
+
+                    await authController
+                        .login(emailController.text, passwordController.text)
+                        .whenComplete(() {
+                      setState(() {
+                        loading = false;
+                      });
+                    }).catchError(
+                            (error, stackTrace) => print(error.toString()));
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    child: loading
+                        ? const SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: CircularProgressIndicator(
+                              color: primaryColor,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : Text(
+                            "Login",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                  )),
             ]),
           ),
         ),
