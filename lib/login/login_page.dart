@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import '../app_state.dart';
 import '../authentication/authentication_controller.dart';
 import '../theme.dart';
 
@@ -132,6 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                           setState(() {
                             loading = false;
                           });
+                          AppState.of(context).fetchUser();
                         }).catchError(
                           (err, stackTrace) {
                             setState(() {

@@ -99,8 +99,4 @@ class _RechargePageState extends State<RechargePage>
   bool get wantKeepAlive => true;
 }
 
-class Plan {
-  final String rate;
-  final String desc;
-  Plan({required this.rate, required this.desc});
-}
+

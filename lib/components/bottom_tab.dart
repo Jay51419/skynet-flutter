@@ -57,7 +57,7 @@ class _BottomTabState extends State<BottomTab> {
                 builder: (BuildContext context) => AlertDialog(
                   title: const Text('UPI App Not Found'),
                   content: const Text(
-                      'Please install a UPI app to proceed with the payment.'),
+                      'Please install an UPI app to proceed with the payment.'),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () {

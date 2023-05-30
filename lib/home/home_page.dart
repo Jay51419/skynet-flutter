@@ -1,28 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:skynet/app_state.dart';
 import 'package:skynet/theme.dart';
 
 import '../components/detail_tab.dart';
-
-class PlanDetail {
-  String speed;
-  String data;
-  String validity;
-  PlanDetail({required this.speed, required this.data, required this.validity});
-}
-
-class HomePageData {
-  String dataUsage;
-  PlanDetail planDetails;
-  String nextRecharge;
-
-  HomePageData(
-      {required this.dataUsage,
-      required this.planDetails,
-      required this.nextRecharge});
-}
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -33,31 +14,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin<HomePage> {
-  late Future<HomePageData> data;
-  void getData() {
-    final mockData = Future.delayed(
-      const Duration(seconds: 3),
-      () => HomePageData(
-          dataUsage: "37.98",
-          planDetails: PlanDetail(
-              speed: "50Mbps", data: "Unlimited", validity: "30 Days"),
-          nextRecharge: "03-Jan,23"),
-    );
-    final error = Future.delayed(
-      const Duration(seconds: 3),
-      () => throw "Some error Ocurred",
-    );
-    setState(() {
-      data = Random().nextBool() ? mockData : error;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getData();
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -65,8 +21,8 @@ class _HomePageState extends State<HomePage>
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: FutureBuilder<HomePageData>(
-            future: data,
+        child: FutureBuilder<SkyNetUser>(
+            future: AppState.of(context).user,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return SizedBox(
@@ -94,7 +50,7 @@ class _HomePageState extends State<HomePage>
                         style: ButtonStyle(
                             foregroundColor: MaterialStateColor.resolveWith(
                                 (states) => primaryColor)),
-                        onPressed: getData,
+                        onPressed: AppState.of(context).fetchUser,
                         child: const Text("Try again"),
                       )
                     ],
@@ -117,7 +73,7 @@ class _HomePageState extends State<HomePage>
                       Positioned(
                         top: 20,
                         child: Text(
-                          'Hensi,',
+                          '${snapshot.data?.name},',
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.bold,
                             color: primaryColor,
@@ -142,7 +98,7 @@ class _HomePageState extends State<HomePage>
                         ),
                         RichText(
                           text: TextSpan(
-                            text: "37.98",
+                            text: snapshot.data?.dataUsage,
                             style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 60,
@@ -186,7 +142,7 @@ class _HomePageState extends State<HomePage>
                         style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        "03-Jan,23",
+                        "${snapshot.data?.expireDate}",
                         style: GoogleFonts.poppins(color: Colors.black38),
                       ),
                     ],
