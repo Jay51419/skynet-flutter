@@ -8,17 +8,21 @@ import 'package:skynet/components/detail_tab.dart';
 import '../authentication/authentication_controller.dart';
 import '../components/dropdown_detail_tab.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
   @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage>
+    with AutomaticKeepAliveClientMixin<ProfilePage> {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final authController =
         Provider.of<AuthenticationController>(context, listen: false);
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-      ),
+    return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -99,4 +103,7 @@ class ProfilePage extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

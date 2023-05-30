@@ -39,8 +39,9 @@ class _BottomTabState extends State<BottomTab> {
           child: SizedBox(
             height: size.height - 100,
             width: size.width,
-            child: SingleChildScrollView(
-              child: tabItems[_selectedIndex],
+            child: IndexedStack(
+              index: _selectedIndex,
+              children: tabItems,
             ),
           )),
       bottomNavigationBar: AnimatedCrossFade(

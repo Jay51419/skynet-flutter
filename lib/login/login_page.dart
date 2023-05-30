@@ -14,10 +14,10 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController(
-    text: "",
+    text: "jayg5338@gmail.com",
   );
   TextEditingController passwordController = TextEditingController(
-    text: "",
+    text: "password",
   );
   bool loading = false;
   String error = "";
