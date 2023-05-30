@@ -16,6 +16,7 @@ class _SupportPageState extends State<SupportPage>
   String issueText = "";
   TextEditingController issueTextController = TextEditingController();
   bool loading = false;
+  String error = "";
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -27,6 +28,16 @@ class _SupportPageState extends State<SupportPage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                error,
+                style: GoogleFonts.poppins(color: Colors.red),
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
             TextField(
               controller: issueTextController,
               keyboardType: TextInputType.multiline,
