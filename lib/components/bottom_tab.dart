@@ -49,8 +49,28 @@ class _BottomTabState extends State<BottomTab> {
           onPressed: () async {
             final Uri url = Uri.parse(
                 'upi://pay?pa=jaygandhi51419@okhdfcbank&pn=SkyNet&am=${selectedPlanValue?.rate}&cu=INR');
-            if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-              throw Exception('Could not launch $url');
+            try {
+              await launchUrl(url, mode: LaunchMode.externalApplication);
+            } catch (e) {
+              showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('UPI App Not Found'),
+                  content: const Text(
+                      'Please install a UPI app to proceed with the payment.'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context, 'OK');
+                      },
+                      child: Text(
+                        'OK',
+                        style: GoogleFonts.poppins(color: primaryColor),
+                      ),
+                    ),
+                  ],
+                ),
+              );
             }
           },
           style: ButtonStyle(
