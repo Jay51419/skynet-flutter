@@ -13,6 +13,8 @@ class SupportPage extends StatefulWidget {
 
 class _SupportPageState extends State<SupportPage>
     with AutomaticKeepAliveClientMixin<SupportPage> {
+  TextEditingController issueController = TextEditingController(text: "");
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -24,10 +26,11 @@ class _SupportPageState extends State<SupportPage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const TextField(
+            TextField(
+              controller: issueController,
               keyboardType: TextInputType.multiline,
               maxLines: 4,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   hintText: "Write your issues here",
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black12, width: 1),
@@ -42,9 +45,12 @@ class _SupportPageState extends State<SupportPage>
             TextButton(
               style: ButtonStyle(
                   fixedSize: MaterialStateProperty.resolveWith(
-                      (states) => Size(size.width, 60)),
+                    (states) => Size(size.width, 60),
+                  ),
                   backgroundColor: MaterialStateColor.resolveWith((states) {
-                    return primaryColor;
+                    return issueController.value.text == ""
+                        ? Colors.grey
+                        : primaryColor;
                   })),
               onPressed: () {},
               child: Text(
