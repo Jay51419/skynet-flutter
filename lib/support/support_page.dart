@@ -14,7 +14,8 @@ class SupportPage extends StatefulWidget {
 class _SupportPageState extends State<SupportPage>
     with AutomaticKeepAliveClientMixin<SupportPage> {
   String issueText = "";
-
+  TextEditingController issueTextController = TextEditingController();
+  bool loading = false;
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -27,6 +28,7 @@ class _SupportPageState extends State<SupportPage>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
+              controller: issueTextController,
               keyboardType: TextInputType.multiline,
               maxLines: 4,
               onChanged: (value) {
@@ -52,13 +54,39 @@ class _SupportPageState extends State<SupportPage>
                     (states) => Size(size.width, 60),
                   ),
                   backgroundColor: MaterialStateColor.resolveWith((states) {
-                    return issueText == "" ? Colors.grey : primaryColor;
+                    return issueText == "" || loading
+                        ? Colors.grey
+                        : primaryColor;
                   })),
-              onPressed: () {},
-              child: Text(
-                "Submit",
-                style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.bold, color: Colors.white),
+              onPressed: () {
+                setState(() {
+                  loading = true;
+                });
+                Future.delayed(const Duration(seconds: 3), () {
+                  setState(() {
+                    loading = false;
+                    issueTextController.clear();
+                  });
+                });
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                child: loading
+                    ? const SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(
+                          color: primaryColor,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : Text(
+                        "Submit",
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ),
             const SizedBox(
