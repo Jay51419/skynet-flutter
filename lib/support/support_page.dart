@@ -13,7 +13,7 @@ class SupportPage extends StatefulWidget {
 
 class _SupportPageState extends State<SupportPage>
     with AutomaticKeepAliveClientMixin<SupportPage> {
-  TextEditingController issueController = TextEditingController(text: "");
+  String issueText = "";
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +27,13 @@ class _SupportPageState extends State<SupportPage>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              controller: issueController,
               keyboardType: TextInputType.multiline,
               maxLines: 4,
+              onChanged: (value) {
+                setState(() {
+                  issueText = value;
+                });
+              },
               decoration: const InputDecoration(
                   hintText: "Write your issues here",
                   border: OutlineInputBorder(
@@ -48,9 +52,7 @@ class _SupportPageState extends State<SupportPage>
                     (states) => Size(size.width, 60),
                   ),
                   backgroundColor: MaterialStateColor.resolveWith((states) {
-                    return issueController.value.text == ""
-                        ? Colors.grey
-                        : primaryColor;
+                    return issueText == "" ? Colors.grey : primaryColor;
                   })),
               onPressed: () {},
               child: Text(

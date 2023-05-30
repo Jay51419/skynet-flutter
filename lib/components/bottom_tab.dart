@@ -89,6 +89,7 @@ class _BottomTabState extends State<BottomTab> {
           selectedIndex: _selectedIndex,
           onItemSelected: (index) => setState(() {
             _selectedIndex = index;
+            FocusManager.instance.primaryFocus?.unfocus();
           }),
           showElevation: false,
           iconSize: 24,
