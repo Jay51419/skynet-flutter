@@ -20,8 +20,9 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController passwordController = TextEditingController(
     text: "password",
   );
-  bool loading = false;
+  bool obscurePassword = true;
   String error = "";
+  bool loading = false;
   String? emailError;
   String? passwordError;
 
@@ -79,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
               TextField(
                 controller: passwordController,
                 keyboardType: TextInputType.visiblePassword,
-                obscureText: true,
+                obscureText: obscurePassword,
                 decoration: InputDecoration(
                   hintText: "Password",
                   errorText: passwordError,
@@ -88,6 +89,17 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   focusedBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: primaryColor, width: 1),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      Icons.remove_red_eye,
+                      color: obscurePassword ? Colors.grey : primaryColor,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        obscurePassword = !obscurePassword;
+                      });
+                    },
                   ),
                 ),
               ),
@@ -116,43 +128,32 @@ class _LoginPageState extends State<LoginPage> {
                     final passwordRegex = RegExp(r"^.+$");
                     setState(() {
                       error = "";
-                    });
-                    if (emailRegex.hasMatch(emailController.text)) {
-                      setState(() {
+                      if (emailRegex.hasMatch(emailController.text)) {
                         emailError = null;
-                      });
+                      } else {
+                        emailError = "Enter a valid email";
+                      }
                       if (passwordRegex.hasMatch(passwordController.text)) {
-                        setState(() {
-                          passwordError = null;
-                          loading = true;
-                        });
-                        await authController
+                        passwordError = null;
+                      } else {
+                        passwordError = "Enter password";
+                      }
+                      if (emailError == null && passwordError == null) {
+                        loading = true;
+
+                        authController
                             .login(
                                 emailController.text, passwordController.text)
                             .whenComplete(() {
-                          setState(() {
-                            loading = false;
-                          });
+                          loading = false;
                           AppState.of(context).fetchUser();
                         }).catchError(
                           (err, stackTrace) {
-                            setState(() {
-                              error = err.toString();
-                            });
+                            error = err.toString();
                           },
                         );
-                      } else {
-                        setState(() {
-                          passwordError = "Enter password";
-                          loading = false;
-                        });
                       }
-                    } else {
-                      setState(() {
-                        emailError = "Enter a valid email";
-                        loading = false;
-                      });
-                    }
+                    });
                   },
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),

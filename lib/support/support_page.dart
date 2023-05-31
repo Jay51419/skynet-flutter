@@ -80,6 +80,14 @@ class _SupportPageState extends State<SupportPage>
                       issueTextController.clear();
                       issueText = "";
                     });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Issue sent'),
+                        showCloseIcon: true,
+                        closeIconColor: Colors.white,
+                        backgroundColor: Color(0xff4CAF50),
+                      ),
+                    );
                   });
                 }
               },

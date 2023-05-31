@@ -13,7 +13,7 @@ class ChangeWifiPasswordPage extends StatefulWidget {
 class _ChangeWifiPasswordPageState extends State<ChangeWifiPasswordPage> {
   TextEditingController passwordController = TextEditingController();
   String passwordText = "";
-  String error = "";
+  String? error;
   bool loading = false;
   @override
   Widget build(BuildContext context) {
@@ -51,16 +51,6 @@ class _ChangeWifiPasswordPageState extends State<ChangeWifiPasswordPage> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      error,
-                      style: GoogleFonts.poppins(color: Colors.red),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
                   TextField(
                     controller: passwordController,
                     onChanged: (value) {
@@ -68,13 +58,14 @@ class _ChangeWifiPasswordPageState extends State<ChangeWifiPasswordPage> {
                         passwordText = value;
                       });
                     },
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                         hintText: "Password",
-                        border: OutlineInputBorder(
+                        errorText: error,
+                        border: const OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.black12, width: 1),
                         ),
-                        focusedBorder: OutlineInputBorder(
+                        focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: primaryColor, width: 1),
                         )),
                   ),
@@ -95,7 +86,7 @@ class _ChangeWifiPasswordPageState extends State<ChangeWifiPasswordPage> {
                           error =
                               "Password must be at least 8 characters long.";
                         } else {
-                          error = "";
+                          error = null;
                           loading = true;
                           Future.delayed(const Duration(seconds: 3), () {
                             setState(() {
@@ -103,6 +94,14 @@ class _ChangeWifiPasswordPageState extends State<ChangeWifiPasswordPage> {
                               passwordController.clear();
                               passwordText = "";
                             });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Applied successfully'),
+                                showCloseIcon: true,
+                                closeIconColor: Colors.white,
+                                backgroundColor: Color(0xff4CAF50),
+                              ),
+                            );
                           });
                         }
                       });

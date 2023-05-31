@@ -20,12 +20,12 @@ class AuthenticationService {
 
     if (user.isEmpty) {
       return Future.delayed(const Duration(seconds: 4), () {
-        throw "Email doesn't exist";
+        throw "Email does not exist";
       });
     } else {
       if (user[0].password != password) {
         return Future.delayed(
-            const Duration(seconds: 4), () => throw "Incorrect Password");
+            const Duration(seconds: 4), () => throw "Invalid password");
       } else {
         tokenService.saveToken("idk");
         return Future.delayed(const Duration(seconds: 4), () => true);
