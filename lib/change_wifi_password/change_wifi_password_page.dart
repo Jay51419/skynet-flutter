@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -16,6 +14,7 @@ class _ChangeWifiPasswordPageState extends State<ChangeWifiPasswordPage> {
   TextEditingController passwordController = TextEditingController();
   String passwordText = "";
   String error = "";
+  bool loading = false;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -88,7 +87,7 @@ class _ChangeWifiPasswordPageState extends State<ChangeWifiPasswordPage> {
                             (states) => Size(size.width, 60)),
                         backgroundColor:
                             MaterialStateColor.resolveWith((states) {
-                          return primaryColor;
+                          return loading ? Colors.grey : primaryColor;
                         })),
                     onPressed: () {
                       setState(() {
@@ -97,15 +96,35 @@ class _ChangeWifiPasswordPageState extends State<ChangeWifiPasswordPage> {
                               "Password must be at least 8 characters long.";
                         } else {
                           error = "";
+                          loading = true;
+                          Future.delayed(const Duration(seconds: 3), () {
+                            setState(() {
+                              loading = false;
+                              passwordController.clear();
+                              passwordText = "";
+                            });
+                          });
                         }
                       });
-                      print(error);
-                      print(passwordText);
                     },
-                    child: Text(
-                      "Apply for changes",
-                      style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.bold, color: Colors.white),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      child: loading
+                          ? const SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: CircularProgressIndicator(
+                                color: primaryColor,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : Text(
+                              "Apply for changes",
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
                     ),
                   ),
                 ],

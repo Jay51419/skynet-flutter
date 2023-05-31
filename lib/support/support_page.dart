@@ -70,15 +70,18 @@ class _SupportPageState extends State<SupportPage>
                         : primaryColor;
                   })),
               onPressed: () {
-                setState(() {
-                  loading = true;
-                });
-                Future.delayed(const Duration(seconds: 3), () {
+                if (issueText != "" && !loading) {
                   setState(() {
-                    loading = false;
-                    issueTextController.clear();
+                    loading = true;
                   });
-                });
+                  Future.delayed(const Duration(seconds: 3), () {
+                    setState(() {
+                      loading = false;
+                      issueTextController.clear();
+                      issueText = "";
+                    });
+                  });
+                }
               },
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
