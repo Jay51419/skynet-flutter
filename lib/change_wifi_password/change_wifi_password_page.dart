@@ -1,11 +1,21 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../theme.dart';
 
-class ChangeWifiPasswordPage extends StatelessWidget {
+class ChangeWifiPasswordPage extends StatefulWidget {
   const ChangeWifiPasswordPage({super.key});
 
+  @override
+  State<ChangeWifiPasswordPage> createState() => _ChangeWifiPasswordPageState();
+}
+
+class _ChangeWifiPasswordPageState extends State<ChangeWifiPasswordPage> {
+  TextEditingController passwordController = TextEditingController();
+  String passwordText = "";
+  String error = "";
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -40,10 +50,26 @@ class ChangeWifiPasswordPage extends StatelessWidget {
                         fontSize: 24, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
-                  const TextField(
-                    decoration: InputDecoration(
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      error,
+                      style: GoogleFonts.poppins(color: Colors.red),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  TextField(
+                    controller: passwordController,
+                    onChanged: (value) {
+                      setState(() {
+                        passwordText = value;
+                      });
+                    },
+                    decoration: const InputDecoration(
                         hintText: "Password",
                         border: OutlineInputBorder(
                           borderSide:
@@ -64,7 +90,18 @@ class ChangeWifiPasswordPage extends StatelessWidget {
                             MaterialStateColor.resolveWith((states) {
                           return primaryColor;
                         })),
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        if (passwordText.length <= 8) {
+                          error =
+                              "Password must be at least 8 characters long.";
+                        } else {
+                          error = "";
+                        }
+                      });
+                      print(error);
+                      print(passwordText);
+                    },
                     child: Text(
                       "Apply for changes",
                       style: GoogleFonts.poppins(
