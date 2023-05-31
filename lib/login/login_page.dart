@@ -14,12 +14,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController emailController = TextEditingController(
-    text: "jayg5338@gmail.com",
-  );
-  TextEditingController passwordController = TextEditingController(
-    text: "password",
-  );
+  TextEditingController emailController =
+      TextEditingController(text: "" //"jayg5338@gmail.com",
+          );
+  TextEditingController passwordController =
+      TextEditingController(text: "" //"password",
+          );
   bool obscurePassword = true;
   String error = "";
   bool loading = false;
